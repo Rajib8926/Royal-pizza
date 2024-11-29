@@ -17,8 +17,31 @@ import { createTheme } from "@mui/material";
 //     };
 //   }
 // }
-
+// interface brackpointType {
+//   values: {
+//     xxxs: number;
+//     xxs: number;
+//     xs: number;
+//     sm: number;
+//     md: number;
+//     lg: number;
+//     xl: number;
+//     xxl: number;
+//   };
+// }
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xxxs: 0,
+      xxs: 340,
+      xs: 490,
+      sm: 670,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+      xxl: 2000,
+    },
+  },
   palette: {
     primary: {
       light: "#ffb411",
@@ -33,12 +56,29 @@ const theme = createTheme({
       dark: "#ffb411",
       contrastText: "#000",
     },
+    error: {
+      main: "#ff1919",
+    },
   },
 
   components: {
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          "&:last-child": { paddingBottom: "12px" },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: { "&.Mui-disabled": { backgroundColor: "#ffff75" } },
+      },
+    },
+
     MuiTextField: {
       defaultProps: {
         color: "secondary",
+
         style: {
           borderColor: "#ffb411",
         },

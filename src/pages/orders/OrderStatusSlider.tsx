@@ -25,7 +25,12 @@ function OrderStatusSlider() {
   }
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box
+      sx={{
+        width: { md: "300px", sm: "280px", xs: "270px", xxxs: "80%" },
+        marginLeft: { xs: "none", xxxs: "10px" },
+      }}
+    >
       <Slider
         aria-label="Restricted values"
         defaultValue={5}
@@ -45,14 +50,19 @@ function OrderStatusSlider() {
             border: "none",
           },
           ".css-swtyag-MuiSlider-markLabel": {
+            fontSize: { sm: "14px", xs: "13px", xxxs: "12px" },
+
             fontWeight: "600",
           },
           ".css-1qb795b-MuiSlider-markLabel": {
+            left: "10px",
+            fontSize: { sm: "14px", xs: "13px", xxxs: "12px" },
+
             fontWeight: "600",
-            color:"#757575"
+            color: "#757575",
           },
-          ".css-16kozi8-MuiSlider-mark":{
-            display:"none"
+          ".css-16kozi8-MuiSlider-mark": {
+            display: "none",
           },
           ".css-1mvxlpx-MuiSlider-thumb": {
             width: "0px",

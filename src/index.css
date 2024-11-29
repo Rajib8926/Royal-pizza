@@ -10,3 +10,20 @@
   padding: 5px 0;
   transition-duration: 100ms;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #d3d3d3;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  height: 40%;
+  background: rgb(255, 174, 0);
+  border-radius: 10px;
+}

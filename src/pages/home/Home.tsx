@@ -17,7 +17,9 @@ import { useNavigate } from "react-router-dom";
 // }
 
 export default function Home() {
-  const { getMenu, menuData } = usePosts();
+  const { getMenu, menuData, userData } = usePosts();
+  console.log(userData);
+
   console.log(menuData);
   const useNavigation = useNavigate();
   function cardClickHandler(id: string): void {
@@ -27,19 +29,13 @@ export default function Home() {
     getMenu();
   }, []);
   return (
-    <Grid
-      container
-      spacing={3.5}
-      style={{ width: "80vw", margin: "30px auto" }}
-    >
+    <Grid container spacing={3} style={{ width: "80vw", margin: "30px auto" }}>
       {menuData?.map((item: menuType) => (
         <Grid item xs={6} sm={4} md={3} key={item.id}>
           <Card
             onClick={() => cardClickHandler(item.id)}
             sx={{
-              Width: "100%",
-              padding: "10px",
-              borderRadius: "10px",
+              borderRadius: "5px",
               background: "#F6F5F5",
               boxShadow: "none",
               cursor: "pointer",
@@ -47,10 +43,10 @@ export default function Home() {
           >
             <Box
               sx={{
-                height: "250px",
+                height: "270px",
                 width: "100%",
                 overflow: "hidden",
-                borderRadius: "10px",
+                borderRadius: "5px",
               }}
             >
               <CardMedia
@@ -59,20 +55,27 @@ export default function Home() {
                 image={item.imageUrl}
                 alt="green iguana"
                 sx={{
-                  height: "250px",
+                  height: "270px",
                   width: "100%",
-                  borderRadius: "10px",
+                  borderRadius: "5px",
                   display: "inline-block",
                   overflow: "hidden !important",
                   transition: ".3s ease-in-out",
                   "&:hover": {
                     filter: "alpha(opacity=30)",
-                    transform: "scale(1.3)",
+                    transform: "scale(1.1)",
                   },
                 }}
               />
             </Box>
-            <CardContent>
+            <CardContent
+              sx={{
+                paddingBottom: "0px",
+                ".css-40j6uv-MuiCardContent-root:last-child": {
+                  paddingBottom: "0px",
+                },
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -84,7 +87,7 @@ export default function Home() {
                   gutterBottom
                   variant="body1"
                   component="div"
-                  sx={{ fontSize: "16px", fontWeight: "600", color: "#3b3b3b" }}
+                  sx={{ fontSize: "15px", fontWeight: "600", color: "#3b3b3b" }}
                 >
                   {item.name}
                 </Typography>
@@ -96,6 +99,7 @@ export default function Home() {
               </Box>
               <Rating
                 name="half-rating-read"
+                size="medium"
                 defaultValue={4.5}
                 precision={0.5}
                 readOnly

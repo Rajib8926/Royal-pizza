@@ -8,12 +8,24 @@ export default function Orders() {
 
   return (
     <Box>
-      <Box sx={{ width: "880px", margin: "50px auto 0" }}>
-        <Typography variant="h5">Your order</Typography>
-        <Box sx={{ marginTop: "20px" }}>
-          {order?.map((data, index) => (
-            <OrderItem data={data} key={index} />
-          ))}
+      <Box
+        sx={{
+          width: { md: "880px", sm: "70%", xs: "90%", xxxs: "96%" },
+          margin: "50px auto 200px",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ fontSize: { sm: "22px", xs: "20px", xxxs: "19px" } }}
+        >
+          Your order
+        </Typography>
+        <Box sx={{ marginTop: { xs: "20px" } }}>
+          {order ? (
+            order.map((data) => <OrderItem data={data} key={data?.id} />)
+          ) : (
+            <Typography>Loading....</Typography>
+          )}
         </Box>
       </Box>
     </Box>
