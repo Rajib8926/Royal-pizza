@@ -32,6 +32,7 @@ function OrderStatusSlider() {
       }}
     >
       <Slider
+        disabled
         aria-label="Restricted values"
         defaultValue={5}
         getAriaValueText={valuetext}

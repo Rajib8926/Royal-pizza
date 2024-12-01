@@ -1,11 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 import { usePosts } from "../PostProvider";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+
 import CartItem from "./CartItem";
 
 export default function Cart() {
-  const { cartItem, addProductInCart } = usePosts();
+  const { cartItem } = usePosts();
 
   const priceArray = cartItem?.map((data) => data.price * data.quantity);
   const navigate = useNavigate();

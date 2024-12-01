@@ -1,29 +1,39 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import OrderStatusSlider from "./OrderStatusSlider";
-import { usePosts } from "../PostProvider";
+import {
+  cartType,
+  orderType,
+  toppingListType,
+  usePosts,
+} from "../PostProvider";
 import { deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-
-export default function OrderItem({ data }) {
+type orderDataType = {
+  data: orderType;
+};
+export default function OrderItem({ data }: orderDataType) {
   console.log(data);
 
   const { getOrder } = usePosts();
   const [isOrderDeleting, setIsOrderDeleting] = useState<boolean>(false);
   const userId = auth.currentUser?.uid;
   async function deleteHandler() {
-    console.log(data.id);
-    setIsOrderDeleting(true);
-    const parentDocRef = doc(db, "users", userId);
-    const subDocRef = doc(parentDocRef, "order", data.id);
-    await deleteDoc(subDocRef)
-      .then(() => getOrder())
-      .then(() => isOrderDeleting(false));
+    if (userId && data.id) {
+      console.log(data.id);
+      setIsOrderDeleting(true);
+      const parentDocRef = doc(db, "users", userId);
+      const subDocRef = doc(parentDocRef, "order", data.id);
+      await deleteDoc(subDocRef).then(() => getOrder());
+      setIsOrderDeleting(false);
+    }
   }
 
-  const totalArray = data.orderItem?.map((item) => item.price * item.quantity);
+  const totalArray = data?.orderItem?.map(
+    (item: cartType) => item?.price * item?.quantity
+  );
   const orderPrice = totalArray?.reduce(
     (accumulator: number, currentValue: number) => {
       return accumulator + currentValue;
@@ -62,21 +72,21 @@ export default function OrderItem({ data }) {
         sx={{
           display: "flex",
           gap: "25px",
-          md: { width: "100%" },
+          width: "100%",
 
-          justifyContent: "center",
+          justifyContent: { md: "flex-start", xxxs: "center" },
         }}
       >
         <Box
           sx={{
             display: "flex",
             gap: "20px",
-            width: "100%",
+            width: { xxxs: "100%", md: "auto" },
             flexDirection: { md: "row", xxxs: "column" },
           }}
         >
           <Box sx={{ width: "100%" }}>
-            {data.orderItem?.map((item) => (
+            {data.orderItem?.map((item: cartType) => (
               <Box
                 key={item.id}
                 sx={{
@@ -142,7 +152,7 @@ export default function OrderItem({ data }) {
                       }}
                     >
                       {item.extraTopping ? (
-                        item.extraTopping?.map((data) => (
+                        item.extraTopping?.map((data: toppingListType) => (
                           <Typography
                             sx={{
                               display: "flex",
@@ -205,7 +215,7 @@ export default function OrderItem({ data }) {
                 Order placed:
               </Typography>
               <Typography sx={{ fontSize: { sm: "15px", xxxs: "14px" } }}>
-                {data.userDetails.orderDate}
+                {data?.userDetails?.orderDate}
               </Typography>
             </Box>
             <Box sx={{ marginBottom: "15px" }}>
@@ -234,8 +244,8 @@ export default function OrderItem({ data }) {
                         Name:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.firstName} {data.userDetails.lastName}
-                        ,
+                        {data?.userDetails?.firstName}{" "}
+                        {data?.userDetails?.lastName},
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -246,7 +256,7 @@ export default function OrderItem({ data }) {
                         PIN:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.pinNumber}
+                        {data?.userDetails?.pinNumber}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -257,7 +267,7 @@ export default function OrderItem({ data }) {
                         Address:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.address}
+                        {data?.userDetails?.address}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -268,7 +278,7 @@ export default function OrderItem({ data }) {
                         Landmark:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.landMark},
+                        {data?.userDetails?.landMark},
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -279,7 +289,7 @@ export default function OrderItem({ data }) {
                         City:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.city},
+                        {data?.userDetails?.city},
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -290,7 +300,7 @@ export default function OrderItem({ data }) {
                         Phone no.:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.primaryPhoneNumber},
+                        {data?.userDetails?.primaryPhoneNumber},
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
@@ -301,7 +311,7 @@ export default function OrderItem({ data }) {
                         Sec Phone no.:
                       </Typography>
                       <Typography fontSize={{ sm: "14px", xxxs: "13px" }}>
-                        {data.userDetails.secondaryPhoneNumber},
+                        {data?.userDetails?.secondaryPhoneNumber},
                       </Typography>
                     </Box>
                   </Box>

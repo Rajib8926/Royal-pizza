@@ -14,18 +14,20 @@ import {
 import { usePosts } from "../PostProvider";
 import { FaGoogle } from "react-icons/fa";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {  useState } from "react";
+import { useState } from "react";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, db, provider } from "../../firebase";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Form } from "react-router-dom";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import LoginLoading from "../../components/LoginLoading";
 export default function SingUp() {
-  const { setOpenSignUp, openSignUp, setUserData } = usePosts();
-  const [emailErrorMessage, setEmailErrorMessage] = useState();
+  const { setOpenSignUp, openSignUp } = usePosts();
+  const [emailErrorMessage, setEmailErrorMessage] = useState<
+    string | undefined
+  >();
   const [loading, setLoading] = useState<boolean>(false);
   const schema = yup.object().shape({
     fullName: yup.string().required(),
@@ -95,7 +97,13 @@ export default function SingUp() {
       })
     );
   }
-  const onSubmitForm = async (data) => {
+  interface onSubmitType {
+    ConformPassword?: string;
+    CreatePassword: string;
+    email: string;
+    fullName: string;
+  }
+  const onSubmitForm = async (data: onSubmitType) => {
     console.log(data);
     setLoading(true);
     try {
@@ -113,13 +121,15 @@ export default function SingUp() {
           userId: user.uid,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
+      // const errorMessage = error.message;
+      console.log(error);
+
       if (errorCode === "auth/email-already-in-use") {
-        setEmailErrorMessage("Email already in use, please try login instead Sign up");
+        setEmailErrorMessage(
+          "Email already in use, please try login instead Sign up"
+        );
       } else {
         setEmailErrorMessage("Please reload the page");
       }
@@ -131,11 +141,12 @@ export default function SingUp() {
     <Dialog
       open={openSignUp}
       onClose={handleClose}
+      sx={{ ".css-1ghuacj-MuiPaper-root-MuiDialog-paper": { margin: "0px" } }}
       PaperProps={{
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
+          const formJson = Object.fromEntries(formData.entries());
           const email = formJson.email;
           console.log(email);
           handleClose();
@@ -144,7 +155,13 @@ export default function SingUp() {
       onChange={() => setEmailErrorMessage(undefined)}
     >
       <Form onSubmit={handleSubmit(onSubmitForm)}>
-        <Box sx={{ width: "470px", display: "flex", padding: "50px 0" }}>
+        <Box
+          sx={{
+            width: { sm: "470px", xxxs: "95vw" },
+            display: "flex",
+            padding: "50px 0",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -152,7 +169,7 @@ export default function SingUp() {
               flexDirection: "column",
               width: "85%",
               margin: "auto",
-              gap: "19px",
+              gap: { sm: "19px", xxxs: "15px" },
             }}
           >
             <Box sx={{ width: "100%", marginBottom: "5px" }}>

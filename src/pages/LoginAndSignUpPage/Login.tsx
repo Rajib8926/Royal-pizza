@@ -24,7 +24,9 @@ import { Form } from "react-router-dom";
 import LoginLoading from "../../components/LoginLoading";
 export default function Login() {
   const { setOpenLogin, openLogin } = usePosts();
-  const [loginErrorMessage, setLoginErrorMessage] = useState();
+  const [loginErrorMessage, setLoginErrorMessage] = useState<
+    string | undefined
+  >();
   const [loading, setLoading] = useState<boolean>(false);
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -59,7 +61,7 @@ export default function Login() {
   function googleSignHandler() {
     signInWithPopup(auth, provider).then((data) => console.log(data));
   }
-  const onSubmitForm = async (data) => {
+  const onSubmitForm = async (data: { email: string; password: string }) => {
     console.log(data);
     setLoading(true);
     await signInWithEmailAndPassword(auth, data.email, data.password)
@@ -83,11 +85,12 @@ export default function Login() {
     <Dialog
       open={openLogin}
       onClose={handleClose}
+      sx={{ ".css-1ghuacj-MuiPaper-root-MuiDialog-paper": { margin: "0px" } }}
       PaperProps={{
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
+          const formJson = Object.fromEntries(formData.entries());
           const email = formJson.email;
           console.log(email);
           handleClose();
@@ -95,7 +98,13 @@ export default function Login() {
       }}
     >
       <Form onSubmit={handleSubmit(onSubmitForm)}>
-        <Box sx={{ width: "470px", display: "flex", padding: "50px 0" }}>
+        <Box
+          sx={{
+            width: { sm: "470px", xs: "400px", xxxs: "95vw" },
+            display: "flex",
+            padding: "50px 0",
+          }}
+        >
           <Box
             sx={{
               display: "flex",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
-import { usePosts } from "../PostProvider";
+import { cartType, usePosts } from "../PostProvider";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Box,
@@ -17,20 +17,14 @@ import {
 import { FaCheckCircle } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LoginLoading from "../../components/LoginLoading";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 export type toppingType = {
-  id: string;
-  name: string;
-  imageUrl: string;
+  id?: string;
+  name?: string;
+  imageUrl?: string;
 };
+
 export default function Product() {
   const {
     getProduct,
@@ -41,7 +35,6 @@ export default function Product() {
     setOpenSignUp,
     setCartItem,
     cartItem,
-    getCart,
   } = usePosts();
   const [toppings, setToppings] = useState<toppingType[] | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -81,7 +74,7 @@ export default function Product() {
   const isInCart = cartItem?.find((data) => data.id === product?.id);
   async function cartFunction() {
     if (isLogin) {
-      if (!isInCart) {
+      if (!isInCart && product?.id && userId) {
         console.log("Yes");
         setCartLoading(true);
         const parentDocRef = doc(db, "users", userId);
@@ -94,7 +87,7 @@ export default function Product() {
 
         console.log(returnData);
         const docSnap = await getDoc(subcollectionRef);
-        const currentCart = docSnap.data();
+        const currentCart = docSnap.data() as cartType;
 
         if (cartItem) {
           console.log(cartItem);
@@ -103,18 +96,7 @@ export default function Product() {
         } else {
           setCartItem([currentCart]);
         }
-        // cartItem
-        //   ? setCartItem([...cartItem, docSnapshot])
-        //   : setCartItem([docSnapshot]);
-
-        // console.log(docSnapshot.data());
       }
-
-      // addProductInCart({
-      //   ...product,
-      //   quantity: quantity,
-      //   extraTopping: toppings,
-      // });
     } else {
       setOpenSignUp(true);
     }
@@ -142,7 +124,7 @@ export default function Product() {
   return (
     <Box
       sx={{
-        margin: "70px auto",
+        margin: { sm: "70px auto", xxxs: "10px auto" },
         width: { md: "950px", sm: "660px" },
       }}
     >

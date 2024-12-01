@@ -14,17 +14,19 @@ export default function CartItem({ cart }: cartDataType) {
   const { setCartItem, cartItem } = usePosts();
   const userId = auth.currentUser?.uid;
   async function handleQuantityIncrease() {
-    const filterData = cartItem?.map((data) =>
-      data.id === cart.id ? { ...data, quantity: data.quantity + 1 } : data
-    );
-    setCartItem(filterData);
-    const parentDocRef = doc(db, "users", userId);
-    const subDocRef = doc(parentDocRef, "cart", cart.id);
-    await updateDoc(subDocRef, { quantity: cart.quantity + 1 });
-    console.log(filterData);
+    if (userId) {
+      const filterData: cartType[] | undefined = cartItem?.map((data) =>
+        data.id === cart.id ? { ...data, quantity: data.quantity + 1 } : data
+      );
+      setCartItem(filterData);
+      const parentDocRef = doc(db, "users", userId);
+      const subDocRef = doc(parentDocRef, "cart", cart.id);
+      await updateDoc(subDocRef, { quantity: cart.quantity + 1 });
+      console.log(filterData);
+    }
   }
   async function handleQuantityDecrease() {
-    if (cart.quantity !== 1) {
+    if (cart.quantity !== 1 && userId) {
       const filterData = cartItem?.map((data) =>
         data.id === cart.id ? { ...data, quantity: data.quantity - 1 } : data
       );
@@ -50,9 +52,11 @@ export default function CartItem({ cart }: cartDataType) {
     } else {
       setCartItem(filterData);
     }
-    const parentDocRef = doc(db, "users", userId);
-    const subDocRef = doc(parentDocRef, "cart", cart.id);
-    await deleteDoc(subDocRef);
+    if (userId) {
+      const parentDocRef = doc(db, "users", userId);
+      const subDocRef = doc(parentDocRef, "cart", cart.id);
+      await deleteDoc(subDocRef);
+    }
   }
   return (
     <Box

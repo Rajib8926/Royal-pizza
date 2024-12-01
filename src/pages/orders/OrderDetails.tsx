@@ -10,21 +10,22 @@ import {
   Typography,
 } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import indianStates from "./stateName";
-import { usePosts } from "../PostProvider";
+import { usePosts, userDetailsType } from "../PostProvider";
 import { auth, db } from "../../firebase";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import LoginLoading from "../../components/LoginLoading";
 import { LoadingButton } from "@mui/lab";
-
+// import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 export default function OrderDetails() {
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState<userDetailsType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOrderLoading, setIsOrderLoading] = useState(false);
+  console.log(userDetails);
 
   const userId = auth.currentUser?.uid;
   console.log(userId);
@@ -38,20 +39,22 @@ export default function OrderDetails() {
     function () {
       if (userId) {
         async function gateUserDetails() {
-          setIsLoading(true);
+          if (userId) {
+            setIsLoading(true);
 
-          const parentDocRef = doc(db, "users", userId);
-          const subDocRef = doc(parentDocRef, "userDetails", "personalData");
+            const parentDocRef = doc(db, "users", userId);
+            const subDocRef = doc(parentDocRef, "userDetails", "personalData");
 
-          const docSnap = await getDoc(subDocRef).finally(() =>
-            console.log("finally")
-          );
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            setUserDetails(data);
-            reset(data);
+            const docSnap = await getDoc(subDocRef).finally(() =>
+              console.log("finally")
+            );
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              setUserDetails(data);
+              reset(data);
+            }
+            setIsLoading(false);
           }
-          setIsLoading(false);
         }
         gateUserDetails();
       }
@@ -92,7 +95,7 @@ export default function OrderDetails() {
     display: "flex",
     gap: "7px",
   };
-  type inputType = {
+  interface inputType {
     firstName: string;
     lastName: string;
     primaryPhoneNumber: string;
@@ -104,9 +107,9 @@ export default function OrderDetails() {
     city: string;
     landMark: string;
     paymentType?: string;
-  };
+  }
 
-  const formSubmitHandler: SubmitHandler<inputType> = async (data) => {
+  const formSubmitHandler = async (data: inputType) => {
     console.log(data);
     setIsOrderLoading(true);
     const now = new Date();
@@ -119,22 +122,22 @@ export default function OrderDetails() {
     hours = hours % 12;
     hours = hours ? hours : 12;
     const strHours = String(hours).padStart(2, "0");
-    const persomalData = data;
+    const personalData: inputType = { ...data };
 
-    delete persomalData.paymentType;
+    delete personalData.paymentType;
 
-    console.log(persomalData);
+    console.log(personalData);
 
     const currentDate = `${year}/${month}/${day} ${strHours}:${minutes} ${ampm}`;
     const parentDocRef = doc(db, "users", userId);
     const subcollectionRef = collection(parentDocRef, "userDetails");
     const newDocRef = doc(subcollectionRef, "personalData");
-    await setDoc(newDocRef, persomalData);
+    await setDoc(newDocRef, personalData);
     const preOrder = {
       orderItem: orderProduct ? [orderProduct] : cartItem,
       userDetails: { ...data, orderDate: currentDate },
     };
-    if (order) {
+    if (order && userId) {
       const parentDocRef = doc(db, "users", userId);
       const subcollectionRef = collection(parentDocRef, "order");
       await addDoc(subcollectionRef, preOrder).then(getOrder);
@@ -143,10 +146,12 @@ export default function OrderDetails() {
       // );
       await getDoc(parentDocRef, "userDetails");
     } else {
-      const parentDocRef = doc(db, "users", userId);
-      const subcollectionRef = collection(parentDocRef, "order");
-      await addDoc(subcollectionRef, preOrder).then(getOrder);
-      // .then(() => setOrder([preOrder]))
+      if (userId) {
+        const parentDocRef = doc(db, "users", userId);
+        const subcollectionRef = collection(parentDocRef, "order");
+        await addDoc(subcollectionRef, preOrder).then(getOrder);
+        // .then(() => setOrder([preOrder]))
+      }
     }
     console.log(orderProduct);
     setIsOrderLoading(false);
@@ -287,11 +292,7 @@ export default function OrderDetails() {
               sx={{ width: { sm: "600px", xxxs: "95%" }, margin: "50px auto" }}
             >
               <Box sx={{ display: "flex", width: "100%" }}>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
-                  sx={{ width: "100%" }}
-                >
+                <RadioGroup sx={{ width: "100%" }} {...register("paymentType")}>
                   <FormControlLabel
                     sx={{
                       // border: "1px solid",
@@ -301,9 +302,10 @@ export default function OrderDetails() {
                       borderRadius: "5px",
                       background: "#f0f0f0",
                     }}
-                    value="Cash on delivery"
                     control={
                       <Radio
+                        value="Cash on delivery"
+                        color={`${errors.paymentType ? "error" : "primary"}`}
                         sx={{
                           ".css-1nvctzy-MuiButtonBase-root-MuiRadio-root.Mui-checked":
                             { color: "#ffff" },
@@ -311,13 +313,13 @@ export default function OrderDetails() {
                       />
                     }
                     label="Cash on delivery"
-                    {...register("paymentType")}
-                    color={`${errors.paymentType ? "error" : "primary"}`}
                   />
 
                   <FormControlLabel
+                    disabled
                     sx={{
                       // border: "1px solid",
+
                       width: "100%",
                       height: "54px",
                       borderRadius: "5px",
@@ -325,9 +327,8 @@ export default function OrderDetails() {
                       background: "#f0f0f0",
                     }}
                     value="pay online"
-                    control={<Radio />}
+                    control={<Radio value="online" />}
                     label="pay online"
-                    {...register("paymentType")}
                     color={`${errors.paymentType ? "error" : "primary"}`}
                   />
                 </RadioGroup>

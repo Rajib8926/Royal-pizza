@@ -2,22 +2,17 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
-  setDoc,
   writeBatch,
 } from "firebase/firestore";
 import app, { auth } from "../firebase";
-import { Expand } from "@mui/icons-material";
-import { toppingType } from "./product/Product";
-
 interface childrenType {
   children: React.ReactNode;
 }
-type toppingListType = {
+export type toppingListType = {
   name: string;
   imageUrl: string;
   id: string;
@@ -31,67 +26,68 @@ export interface menuType {
   imageUrl: string;
 }
 export interface cartType {
-  id: string;
   name: string;
+  id: string;
   price: number;
   isVeg: boolean;
   imageUrl: string;
-  extraTopping?: toppingListType[];
+  extraTopping: toppingListType[];
   quantity: number;
 }
 interface contextType {
   getMenu: () => void;
   menuData: menuType[] | null;
-  getProduct: (productId: string) => void;
+  getProduct(productId: string | undefined): Promise<void>;
   product: menuType | null;
   getToppings: () => void;
   toppingList: toppingListType[] | null;
-  setCartItem: React.Dispatch<React.SetStateAction<cartType[] | null>>;
-  cartItem: cartType[] | null;
+  setCartItem: React.Dispatch<
+    React.SetStateAction<cartType[] | null | undefined>
+  >;
+  cartItem: cartType[] | null | undefined;
   setOrder: React.Dispatch<React.SetStateAction<orderType[] | null>>;
   order: orderType[] | null;
   setOpenLogin: React.Dispatch<React.SetStateAction<boolean>>;
   openLogin: boolean;
   openSignUp: boolean;
   setOpenSignUp: React.Dispatch<React.SetStateAction<boolean>>;
-  setUserData: any;
-  userData: any;
+  // setUserData: any;
+  // userData: any;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
   isLogin: boolean;
-  addProductInCart(currentProduct: addProductInCartType): Promise<void>;
+  addProductInCart(currentProduct: cartType): Promise<void>;
   getCart(): void;
   getOrder(): Promise<void>;
   deleteAllCart(): Promise<void>;
 }
-interface orderType {
-  orderItem: cartType[];
-  userDetails: {
-    firstName: string;
-    lastName: string;
-    primaryPhoneNumber: string;
-    secondaryPhoneNumber: string;
-    state: string;
-    pinNumber: string;
-    address: string;
-    neatestRoad: string;
-    city: string;
-    landMark: string;
-    paymentType: string;
-  };
+export interface userDetailsType {
+  orderDate: string;
+  firstName: string;
+  lastName: string;
+  primaryPhoneNumber: string;
+  secondaryPhoneNumber: string;
+  state: string;
+  pinNumber: string;
+  address: string;
+  neatestRoad: string;
+  city: string;
+  landMark: string;
+  paymentType: string;
 }
-interface addProductInCartType extends menuType {
-  quantity: number;
-  extraTopping: toppingType[] | null;
+export interface orderType {
+  id?: string;
+  orderItem?: cartType[];
+  userDetails?: userDetailsType;
 }
 const PostContext = createContext({} as contextType);
 export default function PostProvider({ children }: childrenType) {
-  const [userData, setUserData] = useState();
+  // const [userData, setUserData] = useState();
   const [menuData, setMenuData] = useState<menuType[] | null>(null);
   const [product, setProduct] = useState<menuType | null>(null);
   const [toppingList, setToppingList] = useState<toppingListType[] | null>(
     null
   );
-  const [cartItem, setCartItem] = useState<cartType[] | null>(null);
+  const [cartItem, setCartItem] = useState<cartType[] | null | undefined>(null);
   const [order, setOrder] = useState<orderType[] | null>(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [openLogin, setOpenLogin] = useState<boolean>(false);
@@ -106,6 +102,7 @@ export default function PostProvider({ children }: childrenType) {
     });
   };
   const userId = auth.currentUser?.uid;
+  console.log(cartItem);
 
   useEffect(
     function () {
@@ -130,16 +127,14 @@ export default function PostProvider({ children }: childrenType) {
         id: doc.id,
         ...doc.data(),
       }));
-      if (dataList.length === 0) {
+      if (dataList?.length === 0) {
         setCartItem(null);
       } else {
-        setCartItem(dataList);
+        setCartItem(dataList as cartType[]);
       }
     } else {
       setCartItem(null);
     }
-
-    console.log(dataList);
   }
   useEffect(
     function () {
@@ -150,9 +145,9 @@ export default function PostProvider({ children }: childrenType) {
     },
     [userId]
   );
-  async function addProductInCart(currentProduct: addProductInCartType) {
-    if (currentProduct) {
-      const isInCart = cartItem?.find((data) => data.id === product.id);
+  async function addProductInCart(currentProduct: cartType) {
+    if (currentProduct && userId) {
+      const isInCart = cartItem?.find((data) => data.id === product?.id);
       if (!isInCart) {
         console.log("Yes");
 
@@ -171,16 +166,18 @@ export default function PostProvider({ children }: childrenType) {
   }
 
   async function deleteAllCart() {
-    const parentDocRef = doc(db, "users", userId);
-    const subcollectionRef = collection(parentDocRef, "cart");
-    const querySnapshot = await getDocs(subcollectionRef);
-    const batch = writeBatch(db);
+    if (userId) {
+      const parentDocRef = doc(db, "users", userId);
+      const subcollectionRef = collection(parentDocRef, "cart");
+      const querySnapshot = await getDocs(subcollectionRef);
+      const batch = writeBatch(db);
 
-    querySnapshot.forEach((docSnapshot) => {
-      batch.delete(docSnapshot.ref);
-    });
-    await batch.commit();
-    console.log("delete");
+      querySnapshot.forEach((docSnapshot) => {
+        batch.delete(docSnapshot.ref);
+      });
+      await batch.commit();
+      console.log("delete");
+    }
   }
   async function getMenu() {
     const docRef = collection(db, "menu");
@@ -189,20 +186,22 @@ export default function PostProvider({ children }: childrenType) {
       id: doc.id,
       ...doc.data(),
     }));
-    setMenuData(data);
+    setMenuData(data as menuType[]);
   }
-  async function getProduct(productId: string) {
-    const docRef = doc(db, "menu", productId);
-    const docSnap = await getDoc(docRef);
-    const data = docSnap.data();
-    setProduct({ ...data, id: productId });
+  async function getProduct(productId: string | undefined) {
+    if (productId) {
+      const docRef = doc(db, "menu", productId);
+      const docSnap = await getDoc(docRef);
+      const data = docSnap.data();
+      setProduct({ ...data, id: productId } as menuType);
+    }
   }
   async function getOrder() {
     if (userId) {
       const parentDocRef = doc(db, "users", userId);
       const subcollectionRef = collection(parentDocRef, "order");
       const postData = await getDocs(subcollectionRef);
-      const dataList = postData.docs.map((doc) => ({
+      const dataList: orderType[] | null = postData.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -223,7 +222,7 @@ export default function PostProvider({ children }: childrenType) {
       id: doc.id,
       ...doc.data(),
     }));
-    setToppingList(data);
+    setToppingList(data as toppingListType[]);
   }
 
   return (
@@ -243,8 +242,8 @@ export default function PostProvider({ children }: childrenType) {
         openLogin,
         setOpenSignUp,
         openSignUp,
-        setUserData,
-        userData,
+        // setUserData,
+        // userData,
         isLogin,
         setIsLogin,
         addProductInCart,

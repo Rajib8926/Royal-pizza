@@ -1,4 +1,4 @@
-import { Box, Button, List, ListItem } from "@mui/material";
+import { Box, Button, Drawer, List, ListItem } from "@mui/material";
 
 import { NavLink } from "react-router-dom";
 import { usePosts } from "../../pages/PostProvider";
@@ -6,9 +6,13 @@ import Login from "../../pages/LoginAndSignUpPage/Login";
 import SingUp from "../../pages/LoginAndSignUpPage/SignUp";
 import { auth } from "../../firebase";
 import { MdOutlineLogout } from "react-icons/md";
+import NavForMobile from "../../components/NavForMobile";
+import { useState } from "react";
+import Hamburger from "hamburger-react";
 
 export default function Navbar() {
   const { setOpenLogin, setOpenSignUp, isLogin, setIsLogin } = usePosts();
+  const [open, setOpen] = useState(false);
   const handleClickOpenLogin = () => {
     setOpenLogin(true);
   };
@@ -18,6 +22,9 @@ export default function Navbar() {
   const handleSignOut = async () => {
     await auth.signOut().then(() => setIsLogin(false));
     console.log("user log out");
+  };
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
   };
   const navStyles = {
     textDecoration: "none",
@@ -30,12 +37,28 @@ export default function Navbar() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: { lg: "10px 153px",sm:"10px 53px" },
+        padding: {
+          lg: "10px 153px",
+          sm: "10px 53px",
+          xs: "8px 30px 8px",
+          xxs: "8px 16px 8px",
+        },
+
+        boxShadow: "0px 0px 5px #ffc14f",
       }}
     >
-      <Box sx={{ display: "flex", gap: "20%" }}>
-        <img src="../public/webLogo.png" alt="Logo" width={"80px"} />
-        <List sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", gap: { md: "10", sm: "20px" } }}>
+        <Box
+          sx={{
+            width: { xs: "68px", xxxs: "50px" },
+            height: { xs: "56px", xxxs: "45px" },
+
+            background: "url(../public/webLogo.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></Box>
+        <List sx={{ display: { sm: "flex", xxxs: "none" } }}>
           <ListItem>
             <NavLink to={"/"} style={navStyles}>
               Home
@@ -53,76 +76,99 @@ export default function Navbar() {
           </ListItem>
         </List>
       </Box>
-      {isLogin ? (
-        <Button
-          onClick={handleSignOut}
-          variant="contained"
-          sx={{
-            background: "#FDD247",
-            boxShadow: "none",
-            textTransform: "none",
-            width: "120px",
-            height: "47px",
-            fontSize: "16px",
-            color: "#444444",
-            fontWeight: "600",
-
-            "&:hover": {
-              boxShadow: "none",
-              background: "#fdd75b",
-            },
-          }}
-        >
-          Logout{" "}
-          <MdOutlineLogout
-            style={{ paddingLeft: "5px", fontSize: "24px", fontWeight: "600" }}
-          />
-        </Button>
-      ) : (
-        <Box sx={{ display: "flex", gap: "15px" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {isLogin ? (
           <Button
-            onClick={handleClickOpenLogin}
+            onClick={handleSignOut}
             variant="contained"
             sx={{
               background: "#FDD247",
-              width: "100px",
-              height: "47px",
+              display: { sm: "flex", xxxs: "none" },
               boxShadow: "none",
-              color: "#4A4848",
-              fontWeight: "700",
-              fontSize: "17px",
               textTransform: "none",
+              width: { md: "120px", xxxs: "100px" },
+              height: "47px",
+              fontSize: { md: "16px", xxxs: "14px" },
+              color: "#444444",
+              fontWeight: "600",
+              sm: {
+                display: "none",
+              },
               "&:hover": {
                 boxShadow: "none",
                 background: "#fdd75b",
               },
             }}
           >
-            Login
+            Logout{" "}
+            <MdOutlineLogout
+              style={{
+                paddingLeft: "5px",
+                fontSize: "24px",
+                fontWeight: "600",
+              }}
+            />
           </Button>
-          <Button
-            onClick={handleClickOpenSignUp}
-            variant="contained"
-            sx={{
-              background: "primary",
-              width: "100px",
-              height: "47px",
-              boxShadow: "none",
-              color: "#4A4848",
-              fontWeight: "700",
-              fontSize: "17px",
-              textTransform: "none",
-              "&:hover": {
+        ) : (
+          <Box sx={{ display: "flex", gap: "15px" }}>
+            <Button
+              onClick={handleClickOpenLogin}
+              variant="contained"
+              sx={{
+                background: "#FDD247",
+                display: { sm: "block", xxxs: "none" },
+                width: { md: "100px", xxxs: "90px" },
+                height: { md: "47px", sm: "44px" },
+                fontSize: { md: "17px", sm: "15px" },
                 boxShadow: "none",
-                background: "#ffc250",
-              },
-            }}
-          >
-            Sign up
+                color: "#4A4848",
+                fontWeight: "700",
+                textTransform: "none",
+                "&:hover": {
+                  boxShadow: "none",
+                  background: "#fdd75b",
+                },
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              onClick={handleClickOpenSignUp}
+              variant="contained"
+              sx={{
+                background: "primary",
+                display: { sm: "block", xxxs: "none" },
+                width: { md: "100px", xxxs: "90px" },
+                height: { md: "47px", sm: "44px" },
+                fontSize: { md: "17px", sm: "15px" },
+                boxShadow: "none",
+                color: "#4A4848",
+                fontWeight: "700",
+                textTransform: "none",
+                "&:hover": {
+                  boxShadow: "none",
+                  background: "#ffc250",
+                },
+              }}
+            >
+              Sign up
+            </Button>
+          </Box>
+        )}
+        <Box sx={{ display: { sm: "none", xxxs: "block" } }}>
+          <Button onClick={toggleDrawer(true)} sx={{ height: "40px" }}>
+            <Hamburger toggled={open} toggle={setOpen} />
           </Button>
+          <Drawer open={open} onClose={toggleDrawer(false)}>
+            <NavForMobile
+              toggleDrawer={toggleDrawer}
+              handleClickOpenLogin={handleClickOpenLogin}
+              handleClickOpenSignUp={handleClickOpenSignUp}
+              handleSignOut={handleSignOut}
+            />
+          </Drawer>
         </Box>
-      )}
-
+      </Box>
       <Login />
       <SingUp />
     </Box>

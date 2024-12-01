@@ -11,7 +11,11 @@ export default function Orders() {
       <Box
         sx={{
           width: { md: "880px", sm: "70%", xs: "90%", xxxs: "96%" },
-          margin: "50px auto 200px",
+          margin: {
+            md: "50px auto 200px",
+
+            xxxs: "20px auto 150px",
+          },
         }}
       >
         <Typography
@@ -20,7 +24,7 @@ export default function Orders() {
         >
           Your order
         </Typography>
-        <Box sx={{ marginTop: { xs: "20px" } }}>
+        <Box sx={{ marginTop: { md: "20px", xxxs: "0px" } }}>
           {order ? (
             order.map((data) => <OrderItem data={data} key={data?.id} />)
           ) : (
