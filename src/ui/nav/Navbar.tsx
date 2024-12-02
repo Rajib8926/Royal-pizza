@@ -53,7 +53,7 @@ export default function Navbar() {
             width: { xs: "68px", xxxs: "50px" },
             height: { xs: "56px", xxxs: "45px" },
 
-            background: "url(../../../public/webLogo.png)",
+            background: "url(../../../webLogo.png)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

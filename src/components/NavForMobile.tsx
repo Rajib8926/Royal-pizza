@@ -48,7 +48,7 @@ export default function NavForMobile({
             width: { xxxs: "68px" },
             height: { xxxs: "56px" },
 
-            background: "url(../../public/webLogo.png)",
+            background: "url(../../webLogo.png)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

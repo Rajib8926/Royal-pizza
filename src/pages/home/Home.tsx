@@ -120,9 +120,7 @@ export default function Home() {
                     }
                   />
                   <img
-                    src={`./${
-                      item.isVeg ? "veglogo" : "nonVeglogo"
-                    }.jpg`}
+                    src={`./${item.isVeg ? "veglogo" : "nonVeglogo"}.jpg`}
                     alt=""
                     style={{ width: "15px", borderRadius: "2px" }}
                   />
