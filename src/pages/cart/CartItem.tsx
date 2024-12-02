@@ -107,7 +107,7 @@ export default function CartItem({ cart }: cartDataType) {
           </Typography>
           {cart.isVeg ? (
             <img
-              src="../../../public/veglogo.jpg"
+              src="../../../veglogo.jpg"
               width={"15px"}
               style={{ borderRadius: "2px" }}
             ></img>

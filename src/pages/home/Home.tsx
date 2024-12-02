@@ -120,7 +120,7 @@ export default function Home() {
                     }
                   />
                   <img
-                    src={`./public/${
+                    src={`./${
                       item.isVeg ? "veglogo" : "nonVeglogo"
                     }.jpg`}
                     alt=""
