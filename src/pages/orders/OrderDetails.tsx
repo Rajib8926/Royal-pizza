@@ -22,7 +22,7 @@ import LoginLoading from "../../components/LoginLoading";
 import { LoadingButton } from "@mui/lab";
 // import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 export default function OrderDetails() {
-  const [userDetails, setUserDetails] = useState<userDetailsType | null>(null);
+  const [userDetails, setUserDetails] = useState<userDetailsType>();
   const [isLoading, setIsLoading] = useState(false);
   const [isOrderLoading, setIsOrderLoading] = useState(false);
   console.log(userDetails);
@@ -50,7 +50,7 @@ export default function OrderDetails() {
             );
             if (docSnap.exists()) {
               const data = docSnap.data();
-              setUserDetails(data);
+              setUserDetails(data as userDetailsType);
               reset(data);
             }
             setIsLoading(false);
@@ -110,59 +110,66 @@ export default function OrderDetails() {
   }
 
   const formSubmitHandler = async (data: inputType) => {
-    console.log(data);
-    setIsOrderLoading(true);
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    let hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const strHours = String(hours).padStart(2, "0");
-    const personalData: inputType = { ...data };
+    if (userId) {
+      console.log(data);
+      setIsOrderLoading(true);
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const strHours = String(hours).padStart(2, "0");
+      const personalData: inputType = { ...data };
 
-    delete personalData.paymentType;
+      delete personalData.paymentType;
 
-    console.log(personalData);
+      console.log(personalData);
 
-    const currentDate = `${year}/${month}/${day} ${strHours}:${minutes} ${ampm}`;
-    const parentDocRef = doc(db, "users", userId);
-    const subcollectionRef = collection(parentDocRef, "userDetails");
-    const newDocRef = doc(subcollectionRef, "personalData");
-    await setDoc(newDocRef, personalData);
-    const preOrder = {
-      orderItem: orderProduct ? [orderProduct] : cartItem,
-      userDetails: { ...data, orderDate: currentDate },
-    };
-    if (order && userId) {
+      const currentDate = `${year}/${month}/${day} ${strHours}:${minutes} ${ampm}`;
       const parentDocRef = doc(db, "users", userId);
-      const subcollectionRef = collection(parentDocRef, "order");
-      await addDoc(subcollectionRef, preOrder).then(getOrder);
-      // .then(() =>
-      //   setOrder([...order, preOrder])
-      // );
-      await getDoc(parentDocRef, "userDetails");
-    } else {
-      if (userId) {
+      const subcollectionRef = collection(parentDocRef, "userDetails");
+      const newDocRef = doc(subcollectionRef, "personalData");
+      await setDoc(newDocRef, personalData);
+      const preOrder = {
+        orderItem: orderProduct ? [orderProduct] : cartItem,
+        userDetails: { ...data, orderDate: currentDate },
+      };
+      if (order && userId) {
         const parentDocRef = doc(db, "users", userId);
         const subcollectionRef = collection(parentDocRef, "order");
         await addDoc(subcollectionRef, preOrder).then(getOrder);
-        // .then(() => setOrder([preOrder]))
+        // .then(() =>
+        //   setOrder([...order, preOrder])
+        // );
+        const userDetailsDocRef = doc(
+          parentDocRef,
+          "userDetails",
+          "personalData"
+        );
+        await getDoc(userDetailsDocRef);
+      } else {
+        if (userId) {
+          const parentDocRef = doc(db, "users", userId);
+          const subcollectionRef = collection(parentDocRef, "order");
+          await addDoc(subcollectionRef, preOrder).then(getOrder);
+          // .then(() => setOrder([preOrder]))
+        }
       }
-    }
-    console.log(orderProduct);
-    setIsOrderLoading(false);
-    navigate("/orders");
-    if (!orderProduct) {
-      console.log("Tes");
+      console.log(orderProduct);
+      setIsOrderLoading(false);
+      navigate("/orders");
+      if (!orderProduct) {
+        console.log("Tes");
 
-      deleteAllCart()
-        .then(() => setIsOrderLoading(false))
-        .then(() => navigate("/orders"))
-        .then(() => getCart());
+        deleteAllCart()
+          .then(() => setIsOrderLoading(false))
+          .then(() => navigate("/orders"))
+          .then(() => getCart());
+      }
     }
   };
   return (

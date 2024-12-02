@@ -1,34 +1,13 @@
 import { createTheme } from "@mui/material";
 
-// declare module "@mui/material/styles" {
-//   interface Theme {
-//     palette: {
-//       button: {
-//         main: string;
-//       };
-//     };
-//   }
-//   // allow configuration using `createTheme`
-//   interface ThemeOptions {
-//     palette: {
-//       button?: {
-//         main?: string;
-//       };
-//     };
-//   }
-// }
-// interface brackpointType {
-//   values: {
-//     xxxs: number;
-//     xxs: number;
-//     xs: number;
-//     sm: number;
-//     md: number;
-//     lg: number;
-//     xl: number;
-//     xxl: number;
-//   };
-// }
+declare module "@mui/material/styles" {
+  interface BreakpointOverrides {
+    xxxs: true;
+    xxs: true;
+    xxl: true;
+  }
+}
+
 const theme = createTheme({
   breakpoints: {
     values: {

@@ -232,8 +232,9 @@ export default function OrderItem({ data }: orderDataType) {
                   <Box
                     sx={{
                       display: "flex",
-                      width: "320px",
+                      width: { md: "400px", xs: "90%",xxxs:"100%" },
                       flexWrap: "wrap",
+                      border: "1px solid",
                     }}
                   >
                     <Box sx={{ display: "flex" }}>
@@ -259,10 +260,19 @@ export default function OrderItem({ data }: orderDataType) {
                         {data?.userDetails?.pinNumber}
                       </Typography>
                     </Box>
-                    <Box sx={{ display: "flex" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+
+                        alignItems: "flex-start",
+                      }}
+                    >
                       <Typography
                         fontSize={{ sm: "14px", xxxs: "13px" }}
-                        sx={{ fontWeight: "600", color: "#585858" }}
+                        sx={{
+                          fontWeight: "600",
+                          color: "#585858",
+                        }}
                       >
                         Address:
                       </Typography>

@@ -5,12 +5,7 @@
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
 }
-/* .active {
-  border-bottom: 3px solid #fdd247;
 
-  padding: 5px 0;
-  transition-duration: 100ms;
-} */
 /* width */
 ::-webkit-scrollbar {
   width: 5px;

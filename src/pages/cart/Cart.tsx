@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import CartItem from "./CartItem";
 
+import Lottie from "lottie-react";
+import animationDataCart from "../../animations/cart.json";
 export default function Cart() {
   const { cartItem } = usePosts();
 
@@ -87,7 +89,21 @@ export default function Cart() {
           </Box>
         </Box>
       ) : (
-        "no cart"
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
+          }}
+        >
+          <Box sx={{ width: { md: "300px", xxxs: "240px" } }}>
+            <Lottie
+              animationData={animationDataCart}
+              style={{ width: "100%" }}
+            />
+          </Box>
+        </Box>
       )}
     </Box>
   );
