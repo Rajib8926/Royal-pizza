@@ -3,10 +3,13 @@ import { usePosts } from "../PostProvider";
 import OrderItem from "./OrderItem";
 import Lottie from "lottie-react";
 import animationDataOrder from "../../animations/emptyOrder.json";
+import { useEffect } from "react";
 export default function Orders() {
   const { order } = usePosts();
   console.log(order);
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   return (
     <Box>
       <Box

@@ -170,7 +170,7 @@ export default function OrderItem({ data }: orderDataType) {
                         </Typography>
                       )}
                     </Box>
-                    <Box sx={{ display: "flex" }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Typography
                         sx={{
                           fontSize: { sm: "14px", xs: "13px", xxxs: "11px" },
@@ -180,7 +180,11 @@ export default function OrderItem({ data }: orderDataType) {
                       >
                         Quantity:
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography
+                        sx={{
+                          fontSize: { sm: "14px", xs: "13px", xxxs: "11px" },
+                        }}
+                      >
                         {item.quantity}
                       </Typography>
                     </Box>

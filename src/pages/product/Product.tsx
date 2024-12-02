@@ -52,7 +52,9 @@ export default function Product() {
       }
     }
   }
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   function handleQuantityIncrease() {
     setQuantity((data) => (data < 15 ? data + 1 : data));
   }

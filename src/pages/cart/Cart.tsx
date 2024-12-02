@@ -6,6 +6,7 @@ import CartItem from "./CartItem";
 
 import Lottie from "lottie-react";
 import animationDataCart from "../../animations/carEmptyt.json";
+import { useEffect } from "react";
 export default function Cart() {
   const { cartItem } = usePosts();
 
@@ -18,6 +19,9 @@ export default function Cart() {
   function orderClickHandler() {
     navigate("/orderDetails");
   }
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   // useEffect(function () {
   //   addProductInCart();
   // }, []);
@@ -71,8 +75,8 @@ export default function Cart() {
               variant="contained"
               sx={{
                 boxShadow: "none",
-                height: { xs: "43px", xxxs: "35px" },
-                width: { xs: "120px", xxxs: "100px" },
+                height: { xs: "43px", xxxs: "37px" },
+                width: { xs: "120px", xxxs: "115px" },
                 color: "#444444",
                 fontWeight: "600",
                 textTransform: "unset",

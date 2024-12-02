@@ -172,6 +172,9 @@ export default function OrderDetails() {
       }
     }
   };
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   return (
     <Box sx={{ width: "100vw", marginBottom: "30px" }}>
       {(isLogin && orderProduct) || (isLogin && cartItem) ? (
