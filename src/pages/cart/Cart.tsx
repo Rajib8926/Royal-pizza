@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
 
 import Lottie from "lottie-react";
-import animationDataCart from "../../animations/cart.json";
+import animationDataCart from "../../animations/carEmptyt.json";
 export default function Cart() {
   const { cartItem } = usePosts();
 
