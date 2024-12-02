@@ -124,7 +124,7 @@ export default function Product() {
   return (
     <Box
       sx={{
-        margin: { sm: "70px auto", xxxs: "10px auto" },
+        margin: { sm: "70px auto", xxxs: "10px auto 50px" },
         width: { md: "950px", sm: "660px" },
       }}
     >
@@ -242,8 +242,8 @@ export default function Product() {
                   sx={{
                     width: "46%",
                     ...buttonsDisableShadow,
-                    height: { md: "58px", xs: "50px" },
-                    fontSize: { md: "18px", xs: "16px" },
+                    height: { md: "58px", xxxs: "50px" },
+                    fontSize: { md: "18px", xxxs: "16px" },
                     fontWeight: "600",
                     background: "#F0F034",
                     color: "#110b0b",
@@ -264,8 +264,8 @@ export default function Product() {
 
                     width: "46%",
                     ...buttonsDisableShadow,
-                    height: { md: "58px", xs: "50px" },
-                    fontSize: { md: "18px", xs: "16px" },
+                    height: { md: "58px", xxxs: "50px" },
+                    fontSize: { md: "18px", xxxs: "16px" },
                     fontWeight: "600",
                     background: "#F0F034",
                     color: "#110b0b",
@@ -353,7 +353,7 @@ export default function Product() {
               </Typography>
               <Typography
                 variant="body1"
-                fontSize={{ xs: "14px", xxxs: "11px" }}
+                fontSize={{ xs: "14px", xxxs: "12px" }}
                 color="#979797"
                 marginTop={"7px"}
                 fontWeight={"600"}
@@ -377,7 +377,7 @@ export default function Product() {
                   <Typography
                     key={item.id}
                     sx={{
-                      fontSize: { md: "13px", xs: "11px" },
+                      fontSize: { md: "13px", xxxs: "12px" },
                       color: "#757575",
                       fontWeight: "600",
                       display: "flex",
@@ -510,7 +510,7 @@ export default function Product() {
 
                   width: "46%",
                   ...buttonsDisableShadow,
-                  height: { md: "58px", xs: "50px" },
+                  height: { md: "58px", xxxs: "50px" },
                   fontSize: { md: "18px", xs: "16px" },
                   fontWeight: "600",
                   background: "#F0F034",

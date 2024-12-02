@@ -173,7 +173,7 @@ export default function OrderDetails() {
     }
   };
   return (
-    <Box sx={{ width: "100vw" }}>
+    <Box sx={{ width: "100vw", marginBottom: "30px" }}>
       {(isLogin && orderProduct) || (isLogin && cartItem) ? (
         isLoading ? (
           <LoginLoading isOpen={true} />
