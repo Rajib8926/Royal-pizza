@@ -113,7 +113,7 @@ export default function CartItem({ cart }: cartDataType) {
             ></img>
           ) : (
             <img
-              src="public/nonVeglogo.jpg"
+              src="../../../nonVeglogo.jpg"
               width={"15px"}
               style={{ borderRadius: "2px" }}
             ></img>
