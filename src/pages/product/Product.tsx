@@ -321,7 +321,7 @@ export default function Product() {
                   }
                 />
                 <img
-                  src={`../public/${
+                  src={`../../../public/${
                     product.isVeg ? "veglogo" : "nonVeglogo"
                   }.jpg`}
                   alt="img"

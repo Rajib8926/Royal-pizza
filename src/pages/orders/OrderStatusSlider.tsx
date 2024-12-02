@@ -32,13 +32,11 @@ function OrderStatusSlider() {
       }}
     >
       <Slider
-        disabled
         aria-label="Restricted values"
         defaultValue={5}
         getAriaValueText={valuetext}
         step={null}
         marks={marks}
-        disableSwap={true}
         sx={{
           ".css-lq5hqx-MuiSlider-mark": {
             width: "15px",

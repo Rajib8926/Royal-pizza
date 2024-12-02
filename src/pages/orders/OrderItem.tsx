@@ -60,7 +60,7 @@ export default function OrderItem({ data }: orderDataType) {
         }}
       >
         <Typography
-          sx={{ fontSize: { xs: "18px", xxxs: "15px" }, fontWeight: "600" }}
+          sx={{ fontSize: { xs: "18px", xxxs: "15px" }, fontWeight: "500" }}
         >
           order ID:
         </Typography>
@@ -232,9 +232,8 @@ export default function OrderItem({ data }: orderDataType) {
                   <Box
                     sx={{
                       display: "flex",
-                      width: { md: "400px", xs: "90%",xxxs:"100%" },
+                      width: { md: "400px", xs: "90%", xxxs: "100%" },
                       flexWrap: "wrap",
-                      border: "1px solid",
                     }}
                   >
                     <Box sx={{ display: "flex" }}>
