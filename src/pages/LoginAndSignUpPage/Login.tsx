@@ -22,6 +22,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Form } from "react-router-dom";
 import LoginLoading from "../../components/LoginLoading";
+import styled from "@emotion/styled";
+const CustomDialog = styled(Dialog)({ "& .MuiDialog-paper": { margin: 0 } });
 export default function Login() {
   const { setOpenLogin, openLogin } = usePosts();
   const [loginErrorMessage, setLoginErrorMessage] = useState<
@@ -82,7 +84,7 @@ export default function Login() {
       });
   };
   return (
-    <Dialog
+    <CustomDialog
       open={openLogin}
       onClose={handleClose}
       sx={{ ".css-1ghuacj-MuiPaper-root-MuiDialog-paper": { margin: "0px" } }}
@@ -229,6 +231,6 @@ export default function Login() {
           </Box>
         </Box>
       </Form>
-    </Dialog>
+    </CustomDialog>
   );
 }
