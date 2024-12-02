@@ -23,7 +23,9 @@ import * as yup from "yup";
 import { Form } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import LoginLoading from "../../components/LoginLoading";
+import styled from "@emotion/styled";
 export default function SingUp() {
+  const CustomDialog = styled(Dialog)({ "& .MuiDialog-paper": { margin: 0 } });
   const { setOpenSignUp, openSignUp } = usePosts();
   const [emailErrorMessage, setEmailErrorMessage] = useState<
     string | undefined
@@ -138,7 +140,7 @@ export default function SingUp() {
     }
   };
   return (
-    <Dialog
+    <CustomDialog
       open={openSignUp}
       onClose={handleClose}
       sx={{ ".css-1ghuacj-MuiPaper-root-MuiDialog-paper": { margin: "0px" } }}
@@ -361,6 +363,6 @@ export default function SingUp() {
           </Box>
         </Box>
       </Form>
-    </Dialog>
+    </CustomDialog>
   );
 }
