@@ -1,4 +1,3 @@
-
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
@@ -82,7 +81,7 @@ function QontoStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = ["Ordered", "Cooked", "Out of delivery", "Delivered"];
+const steps = ["Ordered", "Cooking", "Out of delivery", "Delivered"];
 
 export default function CustomizedSteppers() {
   return (
