@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import OrderStatusSlider from "./OrderStatusSlider";
+
 import {
   cartType,
   orderType,
@@ -11,6 +11,7 @@ import { auth, db } from "../../firebase";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
+import CustomizedSteppers from "./Steps";
 type orderDataType = {
   data: orderType;
 };
@@ -351,7 +352,8 @@ export default function OrderItem({ data }: orderDataType) {
                 >
                   Track your orders
                 </Typography>
-                <OrderStatusSlider />
+                {/* <OrderStatusSlider /> */}
+                <CustomizedSteppers />
               </Box>
               <Box sx={{ marginTop: "20px" }}>
                 {isOrderDeleting ? (
