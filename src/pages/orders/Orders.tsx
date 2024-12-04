@@ -11,7 +11,7 @@ export default function Orders() {
     window.scrollTo({ top: 0 });
   }, []);
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh" }}>
       <Box
         sx={{
           width: { md: "880px", sm: "70%", xs: "90%", xxxs: "96%" },

@@ -28,7 +28,7 @@ export default function Cart() {
   console.log(cartItem);
 
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh" }}>
       {cartItem ? (
         <Box
           sx={{

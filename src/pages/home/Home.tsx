@@ -22,6 +22,7 @@ export default function Home() {
   return (
     <Box
       sx={{
+        minHeight: "100vh",
         width: { md: "80%", sm: "90vw", xxxs: "100vw" },
         margin: { xs: "30px auto", xxxs: "15px auto 30px" },
         display: "flex",

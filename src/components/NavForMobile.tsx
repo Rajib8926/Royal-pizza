@@ -1,9 +1,17 @@
 import { Box, Button, List, ListItem } from "@mui/material";
 import { MdOutlineLogout } from "react-icons/md";
 import { usePosts } from "../pages/PostProvider";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import { FaCartArrowDown, FaHome } from "react-icons/fa";
+import {
+  FaCartArrowDown,
+  FaFacebookF,
+  FaGithub,
+  FaHome,
+  FaLinkedin,
+} from "react-icons/fa";
+import { IoMail } from "react-icons/io5";
+import { BsInstagram } from "react-icons/bs";
 
 type navFunTyp = {
   toggleDrawer: (newOpen: boolean) => () => void;
@@ -29,6 +37,7 @@ export default function NavForMobile({
     alignItem: "center",
     gap: "8px",
   };
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -44,10 +53,11 @@ export default function NavForMobile({
     >
       <Box sx={{ width: { xs: "80%", xxxs: "90%" } }}>
         <Box
+          onClick={() => navigate("/")}
           sx={{
             width: { xxxs: "68px" },
             height: { xxxs: "56px" },
-
+            cursor: "pointer",
             background: "url(../../webLogo.png)",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -198,6 +208,74 @@ export default function NavForMobile({
           </NavLink>
         </ListItem>
       </List>
+      <Box
+        sx={{
+          display: "flex",
+          position: "absolute",
+          alignItems: { xs: "center" },
+          padding: { sm: "20px 20px", xxxs: "15px 10px" },
+          flexDirection: { xxxs: "column-reverse", xs: "row" },
+
+          bottom: "5px",
+          left: "5px",
+          gap: "6px",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            gap: { xs: "30px", xxxs: "20px" },
+            margin: { xs: "0 20px", xxxs: "0 0px" },
+          }}
+        >
+          <Box>
+            <a
+              target="_blank"
+              href="https://www.facebook.com/profile.php?id=100049178316585"
+              style={{ color: "#ff8800" }}
+            >
+              <FaFacebookF size={"18px"} />
+            </a>
+          </Box>
+          <Box>
+            <a
+              target="_blank"
+              href="https://www.instagram.com/rajibroy8926/"
+              style={{ color: "#ff8800" }}
+            >
+              <BsInstagram size={"18px"} />
+            </a>
+          </Box>
+          <Box>
+            <a
+              target="_blank"
+              href="mailto:royrajib8926@gmail.com"
+              style={{ color: "#ff8800" }}
+            >
+              <IoMail size={"18px"} />
+            </a>
+          </Box>
+          <Box>
+            <a
+              target="_blank"
+              href="https://www.linkedin.com/in/rajib-roy-888087304/"
+              style={{ color: "#ff8800" }}
+            >
+              <FaLinkedin size={"18px"} />
+            </a>
+          </Box>
+
+          <Box>
+            <a
+              target="_blank"
+              href="https://github.com/Rajib8926"
+              style={{ color: "#ff8800" }}
+            >
+              <FaGithub size={"18px"} />
+            </a>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

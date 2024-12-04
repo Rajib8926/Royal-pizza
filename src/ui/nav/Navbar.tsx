@@ -1,6 +1,6 @@
 import { Box, Button, Drawer, List, ListItem } from "@mui/material";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { usePosts } from "../../pages/PostProvider";
 import Login from "../../pages/LoginAndSignUpPage/Login";
 import SingUp from "../../pages/LoginAndSignUpPage/SignUp";
@@ -11,6 +11,7 @@ import { useState } from "react";
 import Hamburger from "hamburger-react";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const { setOpenLogin, setOpenSignUp, isLogin, setIsLogin } = usePosts();
   const [open, setOpen] = useState(false);
   const handleClickOpenLogin = () => {
@@ -49,10 +50,11 @@ export default function Navbar() {
     >
       <Box sx={{ display: "flex", gap: { md: "10", sm: "20px" } }}>
         <Box
+          onClick={() => navigate("/")}
           sx={{
             width: { xs: "68px", xxxs: "50px" },
             height: { xs: "56px", xxxs: "45px" },
-
+            cursor: "pointer",
             background: "url(../../../webLogo.png)",
             backgroundSize: "cover",
             backgroundPosition: "center",

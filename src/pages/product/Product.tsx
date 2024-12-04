@@ -126,6 +126,7 @@ export default function Product() {
   return (
     <Box
       sx={{
+         minHeight: "80vh",
         margin: { sm: "70px auto", xxxs: "10px auto 50px" },
         width: { md: "950px", sm: "660px" },
       }}
