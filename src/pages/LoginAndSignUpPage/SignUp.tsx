@@ -24,33 +24,33 @@ import { Form } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import LoginLoading from "../../components/LoginLoading";
 import styled from "@emotion/styled";
+
+const schema = yup.object().shape({
+  fullName: yup.string().required(),
+  email: yup
+    .string()
+    .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i, "Invalid email format")
+    .required(),
+  CreatePassword: yup
+    .string()
+    .min(6, "Minimum 6 latter require")
+    .max(16, "Password muse be with in 16 latter")
+    .required(),
+  ConformPassword: yup
+    .string()
+    .test("passwords-match", "Passwords must match", function (value) {
+      return this.parent.CreatePassword === value;
+    }),
+});
+const CustomDialog = styled(Dialog)({ "& .MuiDialog-paper": { margin: 0 } });
+
 export default function SingUp() {
-  const CustomDialog = styled(Dialog)({ "& .MuiDialog-paper": { margin: 0 } });
   const { setOpenSignUp, openSignUp } = usePosts();
   const [emailErrorMessage, setEmailErrorMessage] = useState<
     string | undefined
   >();
   const [loading, setLoading] = useState<boolean>(false);
-  const schema = yup.object().shape({
-    fullName: yup.string().required(),
-    email: yup
-      .string()
-      .matches(
-        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i,
-        "Invalid email format"
-      )
-      .required(),
-    CreatePassword: yup
-      .string()
-      .min(6, "Minimum 6 latter require")
-      .max(16, "Password muse be with in 16 latter")
-      .required(),
-    ConformPassword: yup
-      .string()
-      .test("passwords-match", "Passwords must match", function (value) {
-        return this.parent.CreatePassword === value;
-      }),
-  });
+
   const {
     register,
     handleSubmit,
@@ -64,6 +64,8 @@ export default function SingUp() {
   };
   const [showPassword, setShowPassword] = useState(false);
   const [showConformPassword, setShowConformPassword] = useState(false);
+
+  console.log(emailErrorMessage, loading, showPassword, showConformPassword);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleConformClickShowPassword = () =>
@@ -106,7 +108,6 @@ export default function SingUp() {
     fullName: string;
   }
   const onSubmitForm = async (data: onSubmitType) => {
-   
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(
@@ -126,7 +127,6 @@ export default function SingUp() {
     } catch (error: any) {
       const errorCode = error.code;
       // const errorMessage = error.message;
-    
 
       if (errorCode === "auth/email-already-in-use") {
         setEmailErrorMessage(
@@ -139,6 +139,8 @@ export default function SingUp() {
       setLoading(false);
     }
   };
+  console.log(openSignUp);
+
   return (
     <CustomDialog
       open={openSignUp}
@@ -149,8 +151,7 @@ export default function SingUp() {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           Object.fromEntries(formData.entries());
-          
-          
+
           handleClose();
         },
       }}
