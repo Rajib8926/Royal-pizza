@@ -26,7 +26,7 @@ export default function NavForMobile({
   handleClickOpenSignUp,
 }: navFunTyp) {
   const { isLogin } = usePosts();
-  console.log(isLogin);
+ 
   const navStyles = {
     textDecoration: "none",
     fontWeight: "500",

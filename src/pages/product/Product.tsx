@@ -77,22 +77,22 @@ export default function Product() {
   async function cartFunction() {
     if (isLogin) {
       if (!isInCart && product?.id && userId) {
-        console.log("Yes");
+        
         setCartLoading(true);
         const parentDocRef = doc(db, "users", userId);
         const subcollectionRef = doc(parentDocRef, "cart", product?.id);
-        const returnData = await setDoc(subcollectionRef, {
+        await setDoc(subcollectionRef, {
           ...product,
           quantity: quantity,
           extraTopping: toppings,
         }).finally(() => setCartLoading(false));
 
-        console.log(returnData);
+        
         const docSnap = await getDoc(subcollectionRef);
         const currentCart = docSnap.data() as cartType;
 
         if (cartItem) {
-          console.log(cartItem);
+         
 
           setCartItem([...cartItem, currentCart]);
         } else {

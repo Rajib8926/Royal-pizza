@@ -102,7 +102,6 @@ export default function PostProvider({ children }: childrenType) {
     });
   };
   const userId = auth.currentUser?.uid;
-  console.log(cartItem);
 
   useEffect(
     function () {
@@ -115,13 +114,11 @@ export default function PostProvider({ children }: childrenType) {
     [isLogin]
   );
   async function getCart() {
-    console.log(userId);
     if (userId) {
       const parentDocRef = doc(db, "users", userId);
       const subDocRef = collection(parentDocRef, "cart");
 
       const cartData = await getDocs(subDocRef);
-      console.log(cartData);
 
       const dataList = cartData.docs.map((doc) => ({
         id: doc.id,
@@ -141,7 +138,6 @@ export default function PostProvider({ children }: childrenType) {
       getCart();
 
       getOrder();
-      console.log("Logout");
     },
     [userId]
   );
@@ -149,8 +145,6 @@ export default function PostProvider({ children }: childrenType) {
     if (currentProduct && userId) {
       const isInCart = cartItem?.find((data) => data.id === product?.id);
       if (!isInCart) {
-        console.log("Yes");
-
         const parentDocRef = doc(db, "users", userId);
         const subcollectionRef = collection(parentDocRef, "cart");
         await addDoc(subcollectionRef, {
@@ -176,7 +170,6 @@ export default function PostProvider({ children }: childrenType) {
         batch.delete(docSnapshot.ref);
       });
       await batch.commit();
-      console.log("delete");
     }
   }
   async function getMenu() {
