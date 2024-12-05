@@ -16,14 +16,14 @@ type orderDataType = {
   data: orderType;
 };
 export default function OrderItem({ data }: orderDataType) {
-
+  console.log(data);
 
   const { getOrder } = usePosts();
   const [isOrderDeleting, setIsOrderDeleting] = useState<boolean>(false);
   const userId = auth.currentUser?.uid;
   async function deleteHandler() {
     if (userId && data.id) {
-     
+      console.log(data.id);
       setIsOrderDeleting(true);
       const parentDocRef = doc(db, "users", userId);
       const subDocRef = doc(parentDocRef, "order", data.id);

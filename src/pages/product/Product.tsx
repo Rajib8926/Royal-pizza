@@ -17,7 +17,7 @@ import {
 import { FaCheckCircle } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LoginLoading from "../../components/LoginLoading";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 export type toppingType = {
   id?: string;
@@ -77,14 +77,23 @@ export default function Product() {
   async function cartFunction() {
     if (isLogin) {
       if (!isInCart && product?.id && userId) {
+        console.log("Yes");
         setCartLoading(true);
         const parentDocRef = doc(db, "users", userId);
         const subcollectionRef = doc(parentDocRef, "cart", product?.id);
+        const returnData = await setDoc(subcollectionRef, {
+          ...product,
+          quantity: quantity,
+          extraTopping: toppings,
+        }).finally(() => setCartLoading(false));
 
+        console.log(returnData);
         const docSnap = await getDoc(subcollectionRef);
         const currentCart = docSnap.data() as cartType;
 
         if (cartItem) {
+          console.log(cartItem);
+
           setCartItem([...cartItem, currentCart]);
         } else {
           setCartItem([currentCart]);
@@ -117,8 +126,8 @@ export default function Product() {
   return (
     <Box
       sx={{
-        minHeight: "80vh",
-        margin: { sm: "70px auto", xxxs: "10px auto 100px" },
+         minHeight: "80vh",
+        margin: { sm: "70px auto", xxxs: "10px auto 50px" },
         width: { md: "950px", sm: "660px" },
       }}
     >

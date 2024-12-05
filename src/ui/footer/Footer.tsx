@@ -13,7 +13,7 @@ export default function Footer() {
         padding: { sm: "20px 20px", xxxs: "15px 10px" },
         flexDirection: { xxxs: "column-reverse", xs: "row" },
         // height: "57px",
-        width:"100%",
+
         gap: "6px",
       }}
     >
