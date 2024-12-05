@@ -6,7 +6,7 @@ import animationDataOrder from "../../animations/emptyOrder.json";
 import { useEffect } from "react";
 export default function Orders() {
   const { order } = usePosts();
-  console.log(order);
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);

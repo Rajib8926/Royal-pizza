@@ -8,7 +8,7 @@ import LoginLoading from "../../components/LoginLoading";
 export default function Home() {
   const { getMenu, menuData } = usePosts();
 
-  console.log(menuData);
+
   const useNavigation: NavigateFunction = useNavigate();
   function cardClickHandler(id: string | undefined): void {
     if (id) {

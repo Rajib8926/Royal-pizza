@@ -106,7 +106,7 @@ export default function SingUp() {
     fullName: string;
   }
   const onSubmitForm = async (data: onSubmitType) => {
-    console.log(data);
+   
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(
@@ -126,7 +126,7 @@ export default function SingUp() {
     } catch (error: any) {
       const errorCode = error.code;
       // const errorMessage = error.message;
-      console.log(error);
+    
 
       if (errorCode === "auth/email-already-in-use") {
         setEmailErrorMessage(
@@ -148,9 +148,9 @@ export default function SingUp() {
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
-          const email = formJson.email;
-          console.log(email);
+          Object.fromEntries(formData.entries());
+          
+          
           handleClose();
         },
       }}

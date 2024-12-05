@@ -25,7 +25,7 @@ export default function Cart() {
   // useEffect(function () {
   //   addProductInCart();
   // }, []);
-  console.log(cartItem);
+  
 
   return (
     <Box sx={{ minHeight: "100vh" }}>

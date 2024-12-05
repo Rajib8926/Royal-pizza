@@ -61,23 +61,20 @@ export default function Login() {
     event.preventDefault();
   };
   function googleSignHandler() {
-    signInWithPopup(auth, provider).then((data) => console.log(data));
+    signInWithPopup(auth, provider);
   }
   const onSubmitForm = async (data: { email: string; password: string }) => {
-    console.log(data);
     setLoading(true);
     await signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
+      .then(() => {
         // Signed in
-        const user = userCredential.user;
-        console.log(user);
+
         setLoginErrorMessage(undefined);
         // ...
       })
 
-      .catch((error) => {
+      .catch(() => {
         setLoginErrorMessage("Email or password is not verified");
-        console.log(error);
       })
       .finally(() => {
         setLoading(false);
@@ -92,9 +89,7 @@ export default function Login() {
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
-          const email = formJson.email;
-          console.log(email);
+          Object.fromEntries(formData.entries());
           handleClose();
         },
       }}

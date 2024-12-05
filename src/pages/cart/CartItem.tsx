@@ -22,7 +22,8 @@ export default function CartItem({ cart }: cartDataType) {
       const parentDocRef = doc(db, "users", userId);
       const subDocRef = doc(parentDocRef, "cart", cart.id);
       await updateDoc(subDocRef, { quantity: cart.quantity + 1 });
-      console.log(filterData);
+      
+      
     }
   }
   async function handleQuantityDecrease() {
@@ -45,7 +46,8 @@ export default function CartItem({ cart }: cartDataType) {
   }
   async function deleteCart() {
     const filterData = cartItem?.filter((data) => data.id !== cart.id);
-    console.log(filterData);
+  
+    
 
     if (filterData?.length === 0) {
       setCartItem(null);

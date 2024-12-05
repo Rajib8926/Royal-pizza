@@ -22,7 +22,7 @@ export default function Navbar() {
   };
   const handleSignOut = async () => {
     await auth.signOut().then(() => setIsLogin(false));
-    console.log("user log out");
+    
   };
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);

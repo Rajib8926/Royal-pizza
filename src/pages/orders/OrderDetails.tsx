@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Backdrop,
   Box,
   Button,
   CircularProgress,
@@ -20,20 +21,19 @@ import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import LoginLoading from "../../components/LoginLoading";
 import { LoadingButton } from "@mui/lab";
-// import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
+import Lottie from "lottie-react";
+import conformationAnimation from "../../animations/orderDone.json";
+
 export default function OrderDetails() {
   const [userDetails, setUserDetails] = useState<userDetailsType>();
   const [isLoading, setIsLoading] = useState(false);
   const [isOrderLoading, setIsOrderLoading] = useState(false);
-  console.log(userDetails);
 
   const userId = auth.currentUser?.uid;
-  console.log(userId);
 
   const { cartItem, getCart, order, isLogin, getOrder, deleteAllCart } =
     usePosts();
   const navigate = useNavigate();
-  console.log(cartItem);
 
   useEffect(
     function () {
@@ -45,9 +45,7 @@ export default function OrderDetails() {
             const parentDocRef = doc(db, "users", userId);
             const subDocRef = doc(parentDocRef, "userDetails", "personalData");
 
-            const docSnap = await getDoc(subDocRef).finally(() =>
-              console.log("finally")
-            );
+            const docSnap = await getDoc(subDocRef);
             if (docSnap.exists()) {
               const data = docSnap.data();
               setUserDetails(data as userDetailsType);
@@ -67,7 +65,8 @@ export default function OrderDetails() {
   const PinNumberRegExp = /^[0-9]{6}$/;
   const location = useLocation();
   const orderProduct = location.state;
-  console.log(orderProduct);
+
+  
 
   const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -109,9 +108,11 @@ export default function OrderDetails() {
     paymentType?: string;
   }
 
+  const [isConformation, setIsConformation] = useState(false);
   const formSubmitHandler = async (data: inputType) => {
     if (userId) {
-      console.log(data);
+     
+      
       setIsOrderLoading(true);
       const now = new Date();
       const year = now.getFullYear();
@@ -127,7 +128,8 @@ export default function OrderDetails() {
 
       delete personalData.paymentType;
 
-      console.log(personalData);
+     
+      
 
       const currentDate = `${year}/${month}/${day} ${strHours}:${minutes} ${ampm}`;
       const parentDocRef = doc(db, "users", userId);
@@ -159,16 +161,29 @@ export default function OrderDetails() {
           // .then(() => setOrder([preOrder]))
         }
       }
-      console.log(orderProduct);
-      setIsOrderLoading(false);
-      navigate("/orders");
-      if (!orderProduct) {
-        console.log("Tes");
 
-        deleteAllCart()
-          .then(() => setIsOrderLoading(false))
-          .then(() => navigate("/orders"))
-          .then(() => getCart());
+      setIsOrderLoading(false);
+      setIsConformation(true);
+      setTimeout(() => {
+        setIsConformation(false);
+        navigate("/orders");
+      }, 3500);
+      if (!orderProduct) {
+      
+        
+
+        deleteAllCart().then(() => {
+          setIsOrderLoading(false);
+          setIsConformation(true);
+          getCart();
+          setTimeout(() => {
+          
+            
+
+            setIsConformation(false);
+            navigate("/orders");
+          }, 3500);
+        });
       }
     }
   };
@@ -176,7 +191,7 @@ export default function OrderDetails() {
     window.scrollTo({ top: 0 });
   }, []);
   return (
-    <Box sx={{ width: "100vw", marginBottom: "30px" }}>
+    <Box sx={{ height: "90vh" }}>
       {(isLogin && orderProduct) || (isLogin && cartItem) ? (
         isLoading ? (
           <LoginLoading isOpen={true} />
@@ -403,6 +418,26 @@ export default function OrderDetails() {
           </Typography>
         </Box>
       )}
+      <Backdrop
+        sx={(theme) => ({
+          color: "#ffd311",
+          zIndex: theme.zIndex.drawer + 1,
+          background: "#2f8afc",
+        })}
+        open={isConformation}
+      >
+        <Box sx={{ width: { md: "300px", xxxs: "230px" } }}>
+          {isConformation ? (
+            <Lottie
+              loop={false}
+              animationData={conformationAnimation}
+              style={{ width: "100%" }}
+            />
+          ) : (
+            ""
+          )}
+        </Box>
+      </Backdrop>
     </Box>
   );
 }
